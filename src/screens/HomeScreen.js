@@ -1,11 +1,9 @@
 import * as React from "react";
 import {
   StyleSheet,
-  SafeAreaView,
   Platform,
   StatusBar,
   View,
-  Text,
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";

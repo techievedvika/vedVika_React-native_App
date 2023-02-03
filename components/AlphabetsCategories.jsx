@@ -1,68 +1,145 @@
 import {
-  ScrollView,
-  Text,
+  StyleSheet,
   View,
-  ImageBackground,
-  useWindowDimensions,
   Image,
+  useWindowDimensions,
   TouchableOpacity,
+  ImageBackground,
+  Text,
+  Button,
+  Pressable,
+  StatusBar,
 } from "react-native";
-import { useLayoutEffect } from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import React, { useState, useEffect, useRef } from "react";
+import Animated, {
+  useSharedValue,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  interpolate,
+  useAnimatedRef,
+} from "react-native-reanimated";
+import Pagination from "./Pagination";
 import Bg from "../assets/img/BG-01.jpg";
-import alphabetScreenCard from "../assets/img/alphabetScreenCard.jpeg";
-import leftArrow from "../assets/arrow-left.png";
+import backbt from "../assets/backward-01.png";
 
-const AlphabetsCategories = () => {
-  // router navigation variable
+const AlphabetsCategories = ({ data, autoPlay, pagination }) => {
+  const scrollViewRef = useAnimatedRef(null);
   const navigation = useNavigation();
-  // display Dimensions
-  const { height, width } = useWindowDimensions();
+  const interval = useRef();
+  const [isAutoPlay, setIsAutoPlay] = useState(autoPlay);
+  const [newData] = useState([
+    { key: "spacer-left" },
+    ...data,
+    { key: "spacer-right" },
+  ]);
+  const { width, height } = useWindowDimensions();
+  const SIZE = width * 0.5;
+  const SPACER = (width - SIZE) / 2;
+  const x = useSharedValue(0);
+  const offSet = useSharedValue(0);
+  const onScroll = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      x.value = event.contentOffset.x;
+    },
+  });
+  useEffect(() => {
+    if (isAutoPlay === true) {
+      let _offSet = offSet.value;
+      interval.current = setInterval(() => {
+        if (_offSet >= Math.floor(SIZE * (data.length - 1) - 10)) {
+          _offSet = 0;
+        } else {
+          _offSet = Math.floor(_offSet + SIZE);
+        }
+        scrollViewRef.current.scrollTo({ x: _offSet, y: 0 });
+      }, 2000);
+    } else {
+      clearInterval(interval.current);
+    }
+  }, [SIZE, SPACER, isAutoPlay, data.length, offSet.value, scrollViewRef]);
   return (
     <>
-      <View>
-        {/* background image  */}
+      <StatusBar hidden={true} />
+
+      <View className="">
         <ImageBackground
           source={Bg}
           style={{ height: height, width: width }}
-          resizeMode="cover"
-          className="px-5"
+          // resizeMode="cover"
+          className="overflow-visible flex-1 justify-center w-full"
         >
-          <View>
-            <TouchableOpacity
-              onPress={navigation.goBack}
-              className="absolute p-4"
+          <View className="my-5 ml-10">
+            <Pressable
+              onPress={() => navigation.goBack()}
+              className="flex-row justify-start items-start"
             >
-              <Image source={leftArrow} className="w-10 h-10" />
-            </TouchableOpacity>
+              {/* <Text className="font-bold text-lg float-left">Go Back</Text> */}
+              <Image source={backbt} alt="back button" className="h-10 w-10" />
+            </Pressable>
           </View>
 
-          {/* ScrollView card view  */}
-          <View className="flex-1 items-center justify-center">
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                alignItems: "center",
-                justifyContent: "center",
+          <View className="flex-1 ">
+            <Animated.ScrollView
+              ref={scrollViewRef}
+              onScroll={onScroll}
+              onScrollBeginDrag={() => {
+                setIsAutoPlay(false);
               }}
-              className="mr-10"
+              onMomentumScrollEnd={(e) => {
+                offSet.value = e.nativeEvent.contentOffset.x;
+                setIsAutoPlay(autoPlay);
+              }}
+              scrollEventThrottle={16}
+              decelerationRate="fast"
+              snapToInterval={SIZE}
+              horizontal
+              bounces={false}
+              showsHorizontalScrollIndicator={false}
             >
-              {/* Alphabets Screen Touchable Card  */}
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("LearningAlphabet");
-                }}
-              >
-                <Image
-                  source={alphabetScreenCard}
-                  className="w-full h-56 md:h-auto object-cover md:w-64 rounded-lg"
-                />
-                <Text className="absolute bottom-1 left-1 text-white font-bold text-xl">
-                  Alphabets screens cards
-                </Text>
-              </TouchableOpacity>
-            </ScrollView>
+              {newData.map((item, index) => {
+                const style = useAnimatedStyle(() => {
+                  const scale = interpolate(
+                    x.value,
+                    [(index - 2) * SIZE, (index - 1) * SIZE, index * SIZE],
+                    [0.7, 1, 0.7]
+                  );
+                  return {
+                    transform: [{ scale }],
+                  };
+                });
+                if (!item.image) {
+                  return <View style={{ width: SPACER }} key={index} />;
+                }
+                return (
+                  <View
+                    style={{
+                      width: SIZE,
+                      height: height,
+                      justifyContent: "center",
+                      flex: 1,
+                    }}
+                    key={index}
+                  >
+                    <Animated.View style={[style]} className="flex-1">
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate(item?.route);
+                        }}
+                      >
+                        <Image
+                          source={item.image}
+                          // style={styles.image}
+                          className="object-center h-64 w-full rounded-xl"
+                        />
+                      </TouchableOpacity>
+                    </Animated.View>
+                  </View>
+                );
+              })}
+            </Animated.ScrollView>
+
+            {/* {pagination && <Pagination data={data} x={x} size={SIZE} />} */}
           </View>
         </ImageBackground>
       </View>
@@ -72,123 +149,15 @@ const AlphabetsCategories = () => {
 
 export default AlphabetsCategories;
 
-// import React, { useState, useEffect } from "react";
-// import {View, Text, StyleSheet, FlatList, Image, Dimensions} from 'react-native';
-// import Animated, { interpolate, Extrapolate, useSharedValue, useAnimatedStyle } from "react-native-reanimated";
-// import 'react-native-reanimated';
-
-// const SRC_WIDTH = Dimensions.get("window").width;
-// const CARD_LENGTH = SRC_WIDTH * 0.8;
-// const SPACING = SRC_WIDTH * 0.02;
-// const SIDECARD_LENGTH = (SRC_WIDTH * 0.18) / 2;
-// const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
-
-// interface itemProps{
-//   index: number,
-//   scrollX: number,
-// }
-
-// function Item({index, scrollX} : itemProps){
-
-//   const size = useSharedValue(0.8);
-
-//   const inputRange = [
-//     (index -1) * CARD_LENGTH,
-//     index * CARD_LENGTH,
-//     (index + 1) * CARD_LENGTH
-//   ]
-
-//   size.value = interpolate(
-//     scrollX,
-//     inputRange,
-//     [0.8, 1, 0.8],
-//     Extrapolate.CLAMP,
-//   )
-
-//   const opacity = useSharedValue(1);
-//   const opacityInputRange = [
-//     (index - 1) * CARD_LENGTH,
-//     index * CARD_LENGTH,
-//     (index + 1) * CARD_LENGTH,
-//   ];
-//   opacity.value = interpolate(
-//     scrollX,
-//     opacityInputRange,
-//     [0.5, 1, 0.5],
-//     Extrapolate.CLAMP
-//   );
-
-//   const cardStyle = useAnimatedStyle(()=>{
-//     return{
-//       transform: [{scaleY: size.value}],
-//       opacity: opacity.value,
-//     }
-//   })
-
-//   return(
-//     <Animated.View style={[styles.card, cardStyle, {
-//       marginLeft: index == 0 ? SIDECARD_LENGTH : SPACING,
-//       marginRight: index == 2 ? SIDECARD_LENGTH: SPACING,
-//     }]}>
-//       <Image
-//         source={require("../assets/img/alphabetScreenCard.jpeg")}
-//         style={{width: "100%", height: "100%"}}
-//       />
-//     </Animated.View>
-//   )
-// }
-
-// export default function Carousel() {
-
-//   const [scrollX, setScrollX] = useState(0);
-
-//   const DATA = [
-//     {
-//       id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-//       title: "First Item",
-//     },
-//     {
-//       id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-//       title: "Second Item",
-//     },
-//     {
-//       id: "58694a0f-3da1-471f-bd96-145571e29d72",
-//       title: "Third Item",
-//     },
-//   ];
-
-//   return (
-//     <Animated.View>
-//       <AnimatedFlatList
-//         scrollEventThrottle={16}
-//         showsHorizontalScrollIndicator={false}
-//         decelerationRate={0.8}
-//         snapToInterval={CARD_LENGTH + (SPACING * 1.5)}
-//         disableIntervalMomentum={true}
-//         disableScrollViewPanResponder={true}
-//         snapToAlignment={"center"}
-//         data={DATA}
-//         horizontal={true}
-//         renderItem={({item, index})=>{
-//           return(
-//             <Item index={index} scrollX={scrollX} />
-//           )
-//         }}
-//         //@ts-ignore
-//         keyExtractor={(item) => item.id}
-//         onScroll={(event)=>{
-//           setScrollX(event.nativeEvent.contentOffset.x);
-//         }}
-//       />
-//     </Animated.View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   card: {
-//     width: CARD_LENGTH,
-//     height: 150,
-//     overflow: "hidden",
-//     borderRadius: 15,
-//   }
-// });
+const styles = StyleSheet.create({
+  imageContainer: {
+    borderRadius: 18,
+    overflow: "hidden",
+    backgroundColor: "pink",
+  },
+  image: {
+    width: "100%",
+    height: undefined,
+    aspectRatio: 16 / 9,
+  },
+});
