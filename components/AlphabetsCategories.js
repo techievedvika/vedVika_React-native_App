@@ -11,7 +11,7 @@ import {
   StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Component } from "react";
 import Animated, {
   useSharedValue,
   useAnimatedScrollHandler,
@@ -20,7 +20,7 @@ import Animated, {
   useAnimatedRef,
 } from "react-native-reanimated";
 import Pagination from "./Pagination";
-import Bg from "../assets/img/BG-01.jpg";
+import Bg from "../assets/img/purple_bg.png";
 import backbt from "../assets/backward-01.png";
 
 const AlphabetsCategories = ({ data, autoPlay, pagination }) => {
@@ -58,6 +58,7 @@ const AlphabetsCategories = ({ data, autoPlay, pagination }) => {
       clearInterval(interval.current);
     }
   }, [SIZE, SPACER, isAutoPlay, data.length, offSet.value, scrollViewRef]);
+
   return (
     <>
       <StatusBar hidden={true} />
@@ -69,17 +70,16 @@ const AlphabetsCategories = ({ data, autoPlay, pagination }) => {
           // resizeMode="cover"
           className="overflow-visible flex-1 justify-center w-full"
         >
-          <View className="my-5 ml-10">
+          <View className="mt-5 ml-10">
             <Pressable
               onPress={() => navigation.goBack()}
               className="flex-row justify-start items-start"
             >
-              {/* <Text className="font-bold text-lg float-left">Go Back</Text> */}
               <Image source={backbt} alt="back button" className="h-10 w-10" />
             </Pressable>
           </View>
 
-          <View className="flex-1 ">
+          <View className="flex-1">
             <Animated.ScrollView
               ref={scrollViewRef}
               onScroll={onScroll}
@@ -102,7 +102,7 @@ const AlphabetsCategories = ({ data, autoPlay, pagination }) => {
                   const scale = interpolate(
                     x.value,
                     [(index - 2) * SIZE, (index - 1) * SIZE, index * SIZE],
-                    [0.7, 1, 0.7]
+                    [0.7, 1.2, 0.7]
                   );
                   return {
                     transform: [{ scale }],
@@ -115,13 +115,16 @@ const AlphabetsCategories = ({ data, autoPlay, pagination }) => {
                   <View
                     style={{
                       width: SIZE,
-                      height: height,
+                      // height: height,
                       justifyContent: "center",
                       flex: 1,
                     }}
                     key={index}
                   >
-                    <Animated.View style={[style]} className="flex-1">
+                    <Animated.View
+                      style={[styles.imageContainer, style]}
+                      className="relative flex-row  justify-center items-end overflow-visible"
+                    >
                       <TouchableOpacity
                         onPress={() => {
                           navigation.navigate(item?.route);
@@ -129,17 +132,23 @@ const AlphabetsCategories = ({ data, autoPlay, pagination }) => {
                       >
                         <Image
                           source={item.image}
-                          // style={styles.image}
-                          className="object-center h-64 w-full rounded-xl"
+                          style={styles.image}
+                          // resizeMode="stretch"
+                          // className={`overflow-scroll`}
                         />
                       </TouchableOpacity>
+                      <View className=" absolute bg-purple-400 rounded-xl">
+                        <Text className="text-2xl  p-1 text-white">
+                          {item.title}
+                        </Text>
+                      </View>
                     </Animated.View>
                   </View>
                 );
               })}
             </Animated.ScrollView>
 
-            {/* {pagination && <Pagination data={data} x={x} size={SIZE} />} */}
+            {pagination && <Pagination data={data} x={x} size={SIZE} />}
           </View>
         </ImageBackground>
       </View>

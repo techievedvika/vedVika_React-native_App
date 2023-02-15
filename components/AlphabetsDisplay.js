@@ -9,174 +9,272 @@ import {
   Button,
   Pressable,
   Switch,
+  ScrollView,
+  Animated,
+  Dimensions,
+  Modal,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState, useEffect, useRef } from "react";
-import Animated, {
-  useSharedValue,
-  useAnimatedScrollHandler,
-  useAnimatedStyle,
-  interpolate,
-  useAnimatedRef,
-} from "react-native-reanimated";
+
 import Pagination from "./Pagination";
 import { StatusBar } from "expo-status-bar";
+import backbt from "../assets/backward-01.png";
+import * as Speech from "expo-speech";
+import Datas from "./data";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const AlphabetsDisplay = ({ data, autoPlay, pagination }) => {
-  const interval = useRef();
   const navigation = useNavigation();
-  const scrollViewRef = useAnimatedRef(null);
-  // auto run toggleswitch
+  const { width, height } = Dimensions.get("window");
+  const [count, setCount] = useState(0);
+  const [imgCount, setImgCount] = useState(0);
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const Add = () => {
+    setImgCount(0);
+    setCount(count + 1);
+  };
+  const sub = () => {
+    setImgCount(0);
+    setCount(count - 1);
+  };
+
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
-  const [isAutoPlay, setIsAutoPlay] = useState(autoPlay);
-
   // fadeAnim will be used as the value for opacity. Initial Value: 0
-  const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  const [newData] = useState([
-    { key: "spacer-left" },
-    ...data,
-    { key: "spacer-right" },
-  ]);
-  const { width, height } = useWindowDimensions();
-  //   const SIZE = width * 0.5;
-  const SIZE = width;
-  const SPACER = (width - SIZE) / 1;
-  //   const SPACER = (width - SIZE) / 2;
-  const x = useSharedValue(0);
-  const offSet = useSharedValue(0);
-  const onScroll = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      x.value = event.contentOffset.x;
-    },
-  });
   useEffect(() => {
-    if (isEnabled === true) {
-      let _offSet = offSet.value;
-      interval.current = setInterval(() => {
-        if (_offSet >= Math.floor(SIZE * (data.length - 1) - 10)) {
-          _offSet = 0;
-        } else {
-          _offSet = Math.floor(_offSet + SIZE);
-        }
-        scrollViewRef.current.scrollTo({ x: _offSet, y: 0 });
+    setModalVisible(true);
+    setTimeout(() => setModalVisible(false), 7000);
+    setTimeout(() => setImgCount(imgCount + 1), 3000);
+  }, [count]);
 
-        // Animated.timing(fadeAnim, {
-        //   toValue: 1,
-        //   duration: 3000,
-        //   useNativeDriver: true,
-        // }).start();
-      }, 2000);
-    } else {
-      clearInterval(interval.current);
-    }
-  }, [SIZE, SPACER, isEnabled, data.length, offSet.value, scrollViewRef]);
+  const speak = (txt) => {
+    modalVisible ? setTimeout(() => Speech.speak(txt), 1000) : "";
+    Speech.speak(txt);
+    Speech.stop();
+  };
 
   return (
-    <View className="bg-white">
-      <StatusBar hidden={true} />
-      <View className="flex-row">
-        <View className="flex-1 justify-start">
-          <Pressable
-            onPress={() => navigation.goBack()}
-            className="mt-20 ml-16"
+    <SafeAreaView>
+      <View className="bg-white" style={{ width: width, height: height }}>
+        <StatusBar hidden={true} />
+        <View className="flex-row my-3 ">
+          <View className="flex-1 justify-start">
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              className="ml-16"
+            >
+              <Image source={backbt} alt="back button" className="h-10 w-10" />
+            </TouchableOpacity>
+          </View>
+          {/* <View className="flex-1 justify-end items-end">
+            <Switch
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSwitch}
+              value={isEnabled}
+              className="mr-16"
+            />
+          </View> */}
+        </View>
+
+        <View className="flex-row justify-center items-center">
+          {!modalVisible ? (
+            <View
+              className="flex-1 w-8 mx-2 justify-center items-start"
+              style={{ height: height }}
+            >
+              <View className="flex-row mb-14">
+                {count === 0 ? (
+                  ""
+                ) : (
+                  <TouchableOpacity activeOpacity={0.5} onPress={sub}>
+                    <Image
+                      source={require("../assets/VedvikaTechnology/backwardButton.png")}
+                      className="h-10 w-10 text-yellow-400"
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+          ) : (
+            ""
+          )}
+
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={modalVisible}
+            horizontal={true}
+            supportedOrientations={["landscape"]}
           >
-            <Text className="font-bold text-lg">Go Back</Text>
-          </Pressable>
-        </View>
-        <View className="flex-1 justify-end items-end">
-          <Switch
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={isEnabled}
-            className="mt-20 mr-16"
-          />
-        </View>
-      </View>
-      <View>
-        <Animated.ScrollView
-          ref={scrollViewRef}
-          onScroll={onScroll}
-          onScrollBeginDrag={() => {
-            setIsAutoPlay(false);
-          }}
-          onMomentumScrollEnd={(e) => {
-            offSet.value = e.nativeEvent.contentOffset.x;
-            setIsAutoPlay(isEnabled);
-          }}
-          scrollEventThrottle={16}
-          decelerationRate="fast"
-          snapToInterval={SIZE}
-          horizontal
-          bounces={false}
-          showsHorizontalScrollIndicator={false}
-        >
-          {newData.map((item, index) => {
-            const style = useAnimatedStyle(() => {
-              const scale = interpolate(
-                x.value,
-                [(index - 2) * SIZE, (index - 1) * SIZE, index * SIZE],
-                [0.5, 1, 0.5]
-              );
-              return {
-                transform: [{ scale }],
-              };
-            });
-            if (!item.image) {
-              return <View style={{ width: SPACER }} key={index} />;
-            }
-            return (
-              <View
-                style={{
-                  width: SIZE,
-                  height: height,
-                  justifyContent: "center",
-                }}
-                key={index}
-              >
-                {/* <Animated.View style={[style]} className=""> */}
-                <Animated.View className="flex-1 my-5 mx-auto">
-                  <View className="flex-row justify-center items-center">
-                    <View className="flex-1 justify-center items-center">
+            <View
+              className="flex-1 justify-center items-center"
+              style={{ height: height, width: width }}
+            >
+              <View className="flex-1 justify-center items-center">
+                {Datas[count].map((item, index) => (
+                  <View className="flex-row justify-center" key={index}>
+                    <View className="flex-row justify-center w-80 ">
                       <Image
-                        source={item?.image}
-                        // style={styles.image}
-                        className="object-center h-64 w-80 overflow-visible"
+                        source={item.imageAlphabets}
+                        className="overflow-visible"
+                        style={{
+                          ...Platform.select({
+                            ios: {
+                              width: 300,
+                              height: 200,
+                            },
+                            android: {
+                              width: 300,
+                              height: 200,
+                            },
+                          }),
+                        }}
                       />
                     </View>
-                    <View className="flex-1 justify-center items-center ">
-                      <Animated.View>
-                        <Image
-                          source={item?.imageName}
-                          style={{
-                            ...Platform.select({
-                              ios: {
-                                width: 200,
-                                height: 256,
-                              },
-                              android: {
-                                width: 245,
-                                height: 256,
-                              },
-                            }),
-                          }}
-                          className="object-center overflow-visible "
-                        />
-                      </Animated.View>
+                    <View className="flex-row justify-center items-center">
+                      {item.images[imgCount].map((itm, i) => (
+                        <View
+                          key={i}
+                          className="flex-row justify-center items-center"
+                        >
+                          <View className="flex-row justify-center items-center">
+                            <TouchableOpacity
+                              activeOpacity={0.5}
+                              onPress={speak(itm?.speech)}
+                            >
+                              <Image
+                                source={itm.img}
+                                style={{
+                                  ...Platform.select({
+                                    ios: {
+                                      width: 200,
+                                      height: 250,
+                                    },
+                                    android: {
+                                      width: 200,
+                                      height: 250,
+                                    },
+                                  }),
+                                }}
+                              />
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      ))}
                     </View>
                   </View>
-                </Animated.View>
+                ))}
               </View>
-            );
-          })}
-        </Animated.ScrollView>
-        {pagination && <Pagination data={data} x={x} size={SIZE} />}
+            </View>
+          </Modal>
+
+          {!modalVisible ? (
+            <View className="flex-1 w-full" style={{ height: height }}>
+              <View className="flex-1 w-full">
+                {Datas[count].map((item, index) => (
+                  <View className="flex-1 w-full" key={index}>
+                    <View className="flex-row w-full justify-center">
+                      <Image
+                        source={item.imageAlphabets}
+                        className="overflow-visible"
+                        style={{
+                          ...Platform.select({
+                            ios: {
+                              width: 100,
+                              height: 80,
+                            },
+                            android: {
+                              width: 100,
+                              height: 80,
+                            },
+                          }),
+                        }}
+                      />
+                    </View>
+                    <View className="flex-row py-3 w-full justify-between items-center">
+                      <View className="flex-1 justify-center items-center">
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          onPress={() => Speech.speak(item.images[0][0].speech)}
+                        >
+                          <Image
+                            source={item.images[0][0].img}
+                            className="overflow-visible"
+                            style={{
+                              ...Platform.select({
+                                ios: {
+                                  width: 200,
+                                  height: 240,
+                                },
+                                android: {
+                                  width: 200,
+                                  height: 240,
+                                },
+                              }),
+                            }}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      <View className="flex-1 justify-center items-center">
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          onPress={() => Speech.speak(item.images[1][0].speech)}
+                        >
+                          <Image
+                            source={item.images[1][0].img}
+                            className="overflow-visible"
+                            style={{
+                              ...Platform.select({
+                                ios: {
+                                  width: 200,
+                                  height: 240,
+                                },
+                                android: {
+                                  width: 200,
+                                  height: 240,
+                                },
+                              }),
+                            }}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            </View>
+          ) : (
+            ""
+          )}
+          {!modalVisible ? (
+            <View
+              className="flex-1 w-8 mx-2 justify-center items-end"
+              style={{ height: height }}
+            >
+              <View className="flex-row mb-14">
+                {count === 25 ? (
+                  ""
+                ) : (
+                  <TouchableOpacity activeOpacity={0.5} onPress={Add}>
+                    <Image
+                      source={require("../assets/VedvikaTechnology/forwardButton.png")}
+                      className="h-10 w-10"
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+          ) : (
+            ""
+          )}
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

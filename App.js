@@ -15,6 +15,7 @@ import PhonicScreen from "./src/screens/Categories/LearnAlphabets/PhonicScreen";
 import AssessmentScreen from "./src/screens/Categories/LearnAlphabets/AssessmentScreen";
 import GamesScreen from "./src/screens/Categories/LearnAlphabets/GamesScreen";
 import WritingDraw from "./src/screens/Categories/LearnAlphabets/WritingDraw";
+import AlphabetCategories from "./src/screens/Categories/LearnAlphabets/WritingCategories/AlphabetCategories";
 
 const Stack = createNativeStackNavigator();
 
@@ -53,7 +54,16 @@ function App() {
             component={WritingDraw}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="Phonic" component={PhonicScreen} />
+          <Stack.Screen
+            name="WritingAplphabetCategories"
+            component={AlphabetCategories}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Phonic"
+            component={PhonicScreen}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen name="Assessment" component={AssessmentScreen} />
           <Stack.Screen name="Games" component={GamesScreen} />
         </Stack.Navigator>

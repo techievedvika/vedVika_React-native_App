@@ -15,20 +15,28 @@ import SignatureScreen from "react-native-signature-canvas";
 import backbt from "../../../../assets/arrow-left.png";
 import forword from "../../../../assets/forward-01.png";
 import backword from "../../../../assets/backward-01.png";
-import TextRecognition from "react-native-text-recognition";
+import axios from "axios";
+import Dialog from "react-native-dialog";
+import * as FileSystem from "expo-file-system";
 
 export default function WritingDraw({ route, navigation }) {
+  const [visible, setVisible] = useState(false);
   const ref = useRef();
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
-  const { latter } = route.params;
+  const { latter, image } = route.params;
+  // console.log(image);
 
   const [result, setResult] = useState();
   const [colorText, setPenColor] = useState("");
 
-  const [signature, setSign] = useState(null);
+  const [signature, setSign] = useState();
 
-  const handleOK = (signature) => {
+  const handleOK = async (signature) => {
+    // const base64 = signature;
+    // const pathToSaveImage = "../../../../assets/image.png";
+
+    // converBase64ToImage(base64, pathToSaveImage);
     setSign(signature);
     sendImg();
   };
@@ -53,10 +61,10 @@ export default function WritingDraw({ route, navigation }) {
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
-    // display: flex;
-    // align-items: start;
-    // justify-content: space-around;
-    // flex-flow: row wrap;
+    display: flex;
+    align-items: start;
+    justify-content: space-around;
+    flex-flow: row wrap;
     padding: 0;
     margin: 0;
     // box-sizing: border-box;
@@ -73,12 +81,12 @@ export default function WritingDraw({ route, navigation }) {
     margin-left: 0px;
     margin-top: 0px;
     border: 1px solid green;
-    background-color: #fff;
-    // box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.08) inset;
+    background-color: white;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.08) inset;
   }
   
   .m-signature-pad:before, .m-signature-pad:after {
-    // position: absolute;
+    position: absolute;
     z-index: -1;
     content: "";
     width: 40%;
@@ -92,7 +100,7 @@ export default function WritingDraw({ route, navigation }) {
     -o-transform: skew(-3deg) rotate(-3deg);
     transform: skew(-3deg) rotate(-3deg);
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4);
-    border: 1px solid pink;
+    // border: 1px solid pink;
   }
   
   .m-signature-pad:after {
@@ -103,7 +111,7 @@ export default function WritingDraw({ route, navigation }) {
     -ms-transform: skew(3deg) rotate(3deg);
     -o-transform: skew(3deg) rotate(3deg);
     transform: skew(3deg) rotate(3deg);
-    border: 1px solid blue;
+    // border: 1px solid blue;
   }
   
   .m-signature-pad--body {
@@ -112,8 +120,9 @@ export default function WritingDraw({ route, navigation }) {
     right: 20px;
     top: 0px;
     bottom: 10px;
-    border: 1px solid orange;
-    // backgroundcolor: #cccccc;
+    
+    // border: 1px solid orange;
+    backgroundcolor: white;
     // height:280px;
     height:${windowHeight - 150}px;
   }
@@ -121,9 +130,11 @@ export default function WritingDraw({ route, navigation }) {
   .m-signature-pad--body
     canvas {
       position: absolute;
-      // background-image: url("../../../../assets/a2.jpeg");
-      background-image: url(${backword});
-      // background-color: #cccccc;
+      flex:1;
+      justify:"center",
+      alignItems:"center",
+      // background-color: white;
+      // z-index: -1;
       left: 0;
       top: 0;
       width: 100%;
@@ -238,33 +249,63 @@ export default function WritingDraw({ route, navigation }) {
     `;
 
   const sendImg = async () => {
-    // const dtText = await TextRecognition.recognize(
-    //   "../../../../assets/a2.jpeg",
-    //   {
-    //     visionIgnoreThreshold: 0.5,
-    //   }
-    // );
-    // console.log("text",dtText)
-    // setResult('')
-    try {
-      const response = await fetch("http://localhost:4000", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ img: signature, title: latter }),
-      });
-      const json = await response.json();
-      setResult(json);
-      // setSign(null);
-    } catch (error) {
-      console.error(error.message);
+    const data = { img: signature, title: latter };
+    // console.log(data);
+    if (signature) {
+      axios
+        .post("http://localhost:3000/api/imagediff", {
+          img: signature,
+          title: latter,
+        })
+        .then(function (response) {
+          setResult(response.data);
+          setVisible(true);
+        })
+        .catch(function (error) {
+          console.log("error", error.message);
+        });
     }
+    // try {
+    //   const response = await fetch(
+    //     // "http://localhost:3000/api/imagediff",
+    //     "http://64.227.168.0/api/imagediff",
+    //     {
+    //       method: "POST",
+    //       headers: {
+    //         // Accept: "application/json",
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify(data),
+    //     }
+    //   );
+    //   const json = await response.json();
+    //   console.log(json);
+    //   setResult(json);
+    // setSign(null);
+    // } catch (error) {
+    //   console.error(error.message);
+    // }
+  };
+
+  const okHandle = () => {
+    // The user has pressed the "Delete" button, so here you can do your own logic.
+    // ...Your logic
+    setVisible(false);
   };
 
   return (
     <>
+      {/* <Dialog.Container visible={visible}>
+        <Dialog.Title>Result</Dialog.Title>
+        <Dialog.Description>
+          {result?.text?.trim() === latter
+            ? Math.floor(result?.result) + " %"
+            : result?.message
+            ? result?.message
+            : result?.text}
+        </Dialog.Description>
+        <Dialog.Button label="Try Again" onPress={okHandle} />
+      </Dialog.Container> */}
       <View className="flex-row mt-2 ml-10 items-center ">
         <View className="flex-1 justify-start">
           <Pressable
@@ -278,9 +319,9 @@ export default function WritingDraw({ route, navigation }) {
           <Text>Draw this latter " {latter} "</Text>
         </View>
       </View>
-      <View className="flex-row justify-center items-center">
+      <View className="flex-row justify-center items-center h-5">
         {/* <Text>{Math.floor(result?.result) + " %"}</Text> */}
-        <Text>
+        <Text className="">
           {result?.text?.trim() === latter
             ? Math.floor(result?.result) + " %"
             : `Not ${latter} :- ` + result?.text}
@@ -311,21 +352,36 @@ export default function WritingDraw({ route, navigation }) {
             </TouchableOpacity> */}
           </View>
         </View>
-        <View className="flex-1 justify-center pb-11 w-full">
+        {/* <Image
+          source={require("../../../../assets/VedvikaTechnology/Alphabet(png)/A(1).png")}
+          className="h-16 w-16"
+        /> */}
+
+        <View
+          className="flex-1 justify-center items-center w-full"
+          // style={{ width: 300 }}
+        >
           <SignatureScreen
             ref={ref}
             onOK={handleOK}
             penColor={colorText}
             webStyle={style}
+            minWidth={5}
+            bgSrc={
+              image
+                ? `https://new.advanceexcel.in/vedvika/Vedvika%20Technology/${image}/${latter}-01(1).png`
+                : ""
+            }
             // backgroundColor="white"
-            // bgWidth={200}
-            // bgHeight={300}
-            // canvasStyle={{ borderWidth: 1, borderColor: "white" , margin:10, }}
+            bgWidth={300}
+            bgHeight={220}
+            style={{ margin: 10, justifyContent: "center" }}
             // clearText="Clear"
             // confirmText="Save"
             // canvasProps={{ width: 0, height: 0 }}
           />
         </View>
+
         <View className="flex-1 justify-start">
           <View className="flex-1 items-center">
             <TouchableOpacity onPress={handleRedo}>

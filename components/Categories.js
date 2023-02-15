@@ -16,7 +16,7 @@ import Animated, {
   useAnimatedRef,
 } from "react-native-reanimated";
 import Pagination from "./Pagination";
-import Bg from "../assets/img/BG-01.jpg";
+import Bg from "../assets/img/purple_bg.png";
 
 const Categories = ({ data, autoPlay, pagination }) => {
   const scrollViewRef = useAnimatedRef(null);
@@ -62,7 +62,7 @@ const Categories = ({ data, autoPlay, pagination }) => {
         resizeMode="cover"
         className="px-5"
       >
-        <View className="">
+        <View className="flex-1">
           <Animated.ScrollView
             ref={scrollViewRef}
             onScroll={onScroll}
@@ -87,7 +87,7 @@ const Categories = ({ data, autoPlay, pagination }) => {
                 const scale = interpolate(
                   x.value,
                   [(index - 2) * SIZE, (index - 1) * SIZE, index * SIZE],
-                  [0.8, 1.1, 0.8]
+                  [0.7, 1.2, 0.7]
                 );
                 // console.log(scale)
                 return {
@@ -107,18 +107,20 @@ const Categories = ({ data, autoPlay, pagination }) => {
                     justifyContent: "center",
                   }}
                   key={index}
+                  className=""
                 >
-                  <Animated.View style={[styles.imageContainer, style]}>
+                  <Animated.View style={[styles.imageContainer, style]} className="">
                     <TouchableOpacity
                       onPress={() => {
                         navigation.navigate(item?.route);
                       }}
+                      className=""
                     >
                       <Image
                         source={item.image}
                         style={styles.image}
                         // resizeMode="stretch"
-                        className={`overflow-scroll`}
+                        
                       />
                     </TouchableOpacity>
                   </Animated.View>

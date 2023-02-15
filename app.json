@@ -1,10 +1,10 @@
 {
   "expo": {
     "name": "vedVika",
-    "slug": "vedVika",
+    "slug": "vedvika",
     "version": "1.0.0",
     "orientation": "landscape",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/img/vedvika_logo.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -19,7 +19,16 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.angadg001.vedVika"
+      "bundleIdentifier": "com.angadg001.vedVika",
+      "plugins": [
+        [
+          "expo-screen-orientation",
+          {
+            "initialOrientation": "DEFAULT"
+          }
+        ]
+      ]
+
     },
     "android": {
       "adaptiveIcon": {
@@ -33,8 +42,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "19a8da1f-61d5-4fa3-81f1-6089b39bfb2c"
+        "projectId": "9ad13018-f43f-4f42-9fc5-1230dbf6849f"
       }
-    }
+    },
+    "owner": "angadg001"
   }
 }

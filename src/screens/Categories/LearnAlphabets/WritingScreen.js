@@ -13,6 +13,7 @@ import {
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import WritingDraw from "./WritingDraw";
+import backbt from "../../../../assets/backward-01.png";
 
 export default function WritingScreen() {
   const navigation = useNavigation();
@@ -156,25 +157,23 @@ export default function WritingScreen() {
     <>
       <StatusBar hidden={true} />
       <ImageBackground
-        source="../../../../assets/img/BG-01.jpg"
+        source={require("../../../../assets/img/purple_bg.png")}
         resizeMode="cover"
         style={{ height: height, width: width }}
-        className="overflow-visible flex-1 items-center justify-center"
+        className="overflow-visible flex-1"
       >
-        <View className=" mt-5 ml-10 ">
-          <Pressable
-            onPress={() => navigation.goBack()}
-            className="flex-row justify-start items-start"
-          >
-            <Text className="font-bold text-lg float-left">Go Back</Text>
+        <View className="mt-5 ml-10">
+          <Pressable onPress={() => navigation.goBack()}>
+            <Image source={backbt} alt="back button" className="h-10 w-10" />
           </Pressable>
         </View>
 
-        <View className="flex-1 justify-center items-center">
+        <View className="flex-1">
           <ScrollView
             horizontal
-            bounces={false}
-            showsHorizontalScrollIndicator={false}
+            // vertical
+            // bounces={false}
+            // showsHorizontalScrollIndicator={false}
           >
             {data?.map((item, index) => {
               return (
@@ -184,8 +183,9 @@ export default function WritingScreen() {
                 >
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.navigate("WritingDraw", {
-                        latter : item?.title
+                      // navigation.navigate("WritingDraw", {
+                      navigation.navigate("WritingAplphabetCategories", {
+                        latter: item?.title,
                       });
                     }}
                   >

@@ -9,7 +9,7 @@ import {
   StatusBar,
 } from "react-native";
 import Logo from "../../assets/img/vedvika_logo.png";
-import Bg from "../../assets/img/BG-01.jpg";
+import Bg from "../../assets/img/purple_bg.png";
 
 const SplashScreen = ({ navigation }) => {
   return (
@@ -18,7 +18,7 @@ const SplashScreen = ({ navigation }) => {
       <ImageBackground
         source={Bg}
         resizeMode="cover"
-        className="flex-1 items-center justify-center"
+        className="flex-1 items-center justify-center overflow-auto"
       >
         <View className="gap-y-6">
           <Image source={Logo} className="w-44 h-48" />

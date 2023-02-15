@@ -14,25 +14,31 @@ const LearningAlphabetScreen = () => {
 
   const data = [
     {
-      image: require("../../assets/img/alphabetScreenCard.jpeg"),
+      image: require("../../assets/img/phonicsImg.jpg"),
+      route: "Phonic",
+      title: "Phonic",
+    },
+    {
+      image: require("../../assets/img/alphabetabc.jpg"),
       route: "Alphabet",
+      title: "Identification Alphabets",
+    },
+
+    {
+      image: require("../../assets/img/alphabetGamesImg.jpeg"),
+      route: "Games",
+      title: "Matching",
     },
     {
       image: require("../../assets/img/writingImg.jpg"),
       route: "Writing",
+      title: "Writing Draw",
     },
-    {
-      image: require("../../assets/img/phonicsImg.jpg"),
-      route: "Phonic",
-    },
-    {
-      image: require("../../assets/img/assessmentImg.jpg"),
-      route: "Assessment",
-    },
-    {
-      image: require("../../assets/img/alphabetGamesImg.jpeg"),
-      route: "Games",
-    },
+
+    // {
+    //   image: require("../../assets/img/assessmentImg.jpg"),
+    //   route: "Assessment",
+    // },
   ];
 
   return (

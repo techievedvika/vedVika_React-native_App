@@ -5,134 +5,346 @@ import AlphabetsDisplay from "../../../../components/AlphabetsDisplay";
 const AlphabetScreen = () => {
   const data = [
     {
-      image: require("../../../../assets/alphabets/A-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/apple-01.jpg"),
-      title: "A",
+      imageAlphabets: require("../../../../assets/alphabets/A-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/apple-01.jpg"),
+          speech: "a for apple",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/ant-01.jpg"),
+          speech: "a for ant",
+        },
+      ],
+      // title: "A",
+      // speech: "a for apple",
     },
     {
-      image: require("../../../../assets/alphabets/B-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/ball-01.jpg"),
-      title: "B",
+      imageAlphabets: require("../../../../assets/alphabets/B-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
+      // title: "B",
+      // speech: "b for ball",
     },
     {
-      image: require("../../../../assets/alphabets/C-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/cat-01.jpg"),
-      title: "C",
+      imageAlphabets: require("../../../../assets/alphabets/C-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/D-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/dog-01.jpg"),
-      title: "D",
+      imageAlphabets: require("../../../../assets/alphabets/D-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/E-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/egg-01.jpg"),
-      title: "E",
+      imageAlphabets: require("../../../../assets/alphabets/E-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/F-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/fish-01.jpg"),
-      title: "F",
+      imageAlphabets: require("../../../../assets/alphabets/F-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/G-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/Grapes-01.jpg"),
-      title: "G",
+      imageAlphabets: require("../../../../assets/alphabets/G-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/H-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/Hat-01.jpg"),
-      title: "H",
+      imageAlphabets: require("../../../../assets/alphabets/H-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/I-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/ice-cream-01.jpg"),
-      title: "I",
+      imageAlphabets: require("../../../../assets/alphabets/I-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/J-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/Jug-01.jpg"),
-      title: "J",
+      imageAlphabets: require("../../../../assets/alphabets/J-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/K-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/Kite-01.jpg"),
-      title: "K",
+      imageAlphabets: require("../../../../assets/alphabets/K-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/L-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/lion-01.jpg"),
-      title: "L",
+      imageAlphabets: require("../../../../assets/alphabets/L-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/M-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/monkey-01.jpg"),
-      title: "M",
+      imageAlphabets: require("../../../../assets/alphabets/M-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/N-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/nest-01.jpg"),
-      title: "N",
+      imageAlphabets: require("../../../../assets/alphabets/N-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/O-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/orenge-01.jpg"),
-      title: "O",
+      imageAlphabets: require("../../../../assets/alphabets/O-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/P-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/parrot-01.jpg"),
-      title: "P",
+      imageAlphabets: require("../../../../assets/alphabets/P-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/Q-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/queen-01.jpg"),
-      title: "Q",
+      imageAlphabets: require("../../../../assets/alphabets/Q-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/R-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/rat-01.jpg"),
-      title: "R",
+      imageAlphabets: require("../../../../assets/alphabets/R-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/S-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/star-01.jpg"),
-      title: "S",
+      imageAlphabets: require("../../../../assets/alphabets/S-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/T-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/tiger-01.jpg"),
-      title: "T",
+      imageAlphabets: require("../../../../assets/alphabets/T-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/U-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/umbrella-01.jpg"),
-      title: "U",
+      imageAlphabets: require("../../../../assets/alphabets/U-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/V-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/van-01.jpg"),
-      title: "V",
+      imageAlphabets: require("../../../../assets/alphabets/V-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/W-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/water-01.jpg"),
-      title: "W",
+      imageAlphabets: require("../../../../assets/alphabets/W-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/X-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/X-mas-01.jpg"),
-      title: "X",
+      imageAlphabets: require("../../../../assets/alphabets/X-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/ball-01.jpg"),
+          speech: "b for ball",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/balloon-01.jpg"),
+          speech: "b for balloon",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/Y-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/yolk-01.jpg"),
-      title: "Y",
+      imageAlphabets: require("../../../../assets/alphabets/Y-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/yolk-01.jpg"),
+          speech: "y for yolk",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/yoyo-01.jpg"),
+          speech: "y for yoyo",
+        },
+      ],
     },
     {
-      image: require("../../../../assets/alphabets/Z-01.jpg"),
-      imageName: require("../../../../assets/alphabetImages/zebra-01.jpg"),
-      title: "Z",
+      imageAlphabets: require("../../../../assets/alphabets/Z-01.jpg"),
+      images: [
+        {
+          img: require("../../../../assets/alphabetImages/zebra-01.jpg"),
+          speech: "z for zebra",
+        },
+        {
+          img: require("../../../../assets/alphabetImages/zero-01.jpg"),
+          speech: "z for zero",
+        },
+      ],
     },
   ];
   return (

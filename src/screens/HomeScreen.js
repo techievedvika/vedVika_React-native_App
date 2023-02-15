@@ -36,7 +36,7 @@ const HomeScreen = () => {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       {/* categories  */}
-      <ImageBackground source="../../assets/img/BG-01.jpg" resizeMode="cover">
+      <ImageBackground>
         <Categories data={data} autoPlay={false} pagination={true} />
       </ImageBackground>
     </View>
